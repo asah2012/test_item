@@ -13,8 +13,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  Item tmp1 =  Item(id: '1',itemCode: 'Item1' , itemName: 'Name1',itemType: 'Type1');
-  List<Item> itemList = [Item(id: '1',itemCode: 'Item1' , itemName: 'Name1',itemType: 'Type1')];
+  Item tmp1 =  Item(id: 1,itemCode: 'Item1' , itemName: 'Name1',itemType: 'Type1');
+  List<Item> itemList = [Item(id: 1,itemCode: 'Item1' , itemName: 'Name1',itemType: 'Type1')];
 
   void _loadData() async{
       final url = Uri.http("192.168.29.50:8080","/item/2");
@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
           return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(child: Text(itemList[index].id),),
+          Container(child: Text(itemList[index].id.toString()),),
           Container(child: Text(itemList[index].itemCode),),
          Container(child: Text(itemList[index].itemName),),
           Container(child: Text(itemList[index].itemType),),
