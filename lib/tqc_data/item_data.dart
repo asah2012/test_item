@@ -31,7 +31,7 @@ class ItemData {
       print("status is ${response.statusCode}");
       print("Body is : ${response.body}");
       //Map<String,dynamic> records = jsonDecode(response.body);
-      var jsonObject = jsonDecode(response.body) as Map<String,Object>;
+      var jsonObject = jsonDecode(response.body);
       List itemObject = jsonObject["records"] as List;
     _itemList= itemObject.map((itemObject) => Item.fromJson(itemObject)).toList();
     _itemList.forEach((element) {print(element.toString());});
