@@ -14,7 +14,9 @@ class _ItemGridScreenState extends State<ItemGridScreen> {
   ItemData itemData = ItemData();
   late ItemDataSource itemDataSource;
   late bool isWebOrDesktop;
+  String _selectedItemCode = '';
   EditingGestureType editingGestureType = EditingGestureType.doubleTap;
+  final DataGridController _dataGridController = DataGridController();
 
   Future<void> itemLoadData() async{
     await itemData.initData();
@@ -35,8 +37,14 @@ SfDataGrid _buildDataGrid(BuildContext context){
       return SfDataGrid(
         allowEditing: true,
         navigationMode: GridNavigationMode.cell,
+        //selectionMode: SelectionMode.multiple,
         selectionMode: SelectionMode.single,
+        checkboxShape: const CircleBorder(),
+        controller: _dataGridController,
         editingGestureType: editingGestureType,
+        showCheckboxColumn: true,
+        allowSorting: true,
+        //checkboxColumnSettings: const DataGridCheckboxColumnSettings(label: Text("Selector"), width: 100),
         source: itemDataSource,
         columnWidthMode: ColumnWidthMode.none,
         columns: <GridColumn>[
@@ -75,11 +83,38 @@ SfDataGrid _buildDataGrid(BuildContext context){
         ],
       );
   }
+
+
+  void selectedRowOperation(){
+      var selectedRow = _dataGridController.selectedRow;
+      DataGridCell selectedcell = selectedRow!.getCells().firstWhere((DataGridCell column) => column.columnName == "ItemCode");
+      setState(() {
+              _selectedItemCode = selectedcell.value;
+      });
+
+
+  }
+
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(title: const Text("Item Table")),
-      body: itemData.itemList.isEmpty ? const Center(child: CircularProgressIndicator()) : SafeArea(child: _buildDataGrid(context)),
+      body: itemData.itemList.isEmpty ? const Center(child: CircularProgressIndicator()) 
+      : SafeArea(child: 
+      Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+        Expanded(child: _buildDataGrid(context)),
+        const SizedBox(height: 10,),
+        ElevatedButton(onPressed: () => selectedRowOperation(), child: const Text("Submit")),
+        const SizedBox(height: 50,),
+        Container(decoration: BoxDecoration(
+          border: Border.all(color: Colors.black , width: 2.0)),
+          width: 100,
+          child : Text("Selected item is $_selectedItemCode")),
+        const SizedBox(height: 100,),
+        ])),
     );   
   }
 
